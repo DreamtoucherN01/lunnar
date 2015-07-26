@@ -33,7 +33,6 @@ public class Accepter {
 	}
 
 	public void startServer() {
-		
 		try {
 			selector = Selector.open();
 			server = ServerSocketChannel.open();

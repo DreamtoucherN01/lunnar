@@ -2,6 +2,8 @@ package com.blake.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.blake.storage.Configuration;
 import com.blake.storage.Configuration.Node;
@@ -10,6 +12,7 @@ public class DataProvider {
 	
 	private static DataProvider inst = null;
 	private Configuration conf = null;
+	private Map<String,String> router;
 	
 	//DB
 	private String driver = "com.mysql.jdbc.Driver";
@@ -30,6 +33,15 @@ public class DataProvider {
 	public void DeInitialize(){
 		conf = null;
 		inst = null;
+	}
+	
+	public void init() {
+		try {
+			inst.getCoreConfigurationDataFromResource();
+			inst.getStratege();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -74,6 +86,23 @@ public class DataProvider {
 		return conf;
 	}
 	
+	public void getStratege() throws IOException{
+		InputStream  in = FileUtils.read("/algorithm.out");
+		byte data[] = new byte[128];
+		in.read(data);
+		in.close();
+		String content[] = new String(data).split("\n");
+		router = new HashMap<String,String>();
+		for(int i=0;i<content.length-1;i++){
+			if(content[i]!=null){
+				String detail[]=content[i].split("=");
+				if(detail[0].startsWith("#"))
+					continue;
+				router.put(detail[0], detail[1]);
+			}
+		}
+	}
+	
 	/*＊
 	 * get configuration 
 	 */
@@ -112,6 +141,14 @@ public class DataProvider {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public Map<String, String> getRouter() {
+		return router;
+	}
+
+	public void setRouter(Map<String, String> router) {
+		this.router = router;
 	}
 
 }

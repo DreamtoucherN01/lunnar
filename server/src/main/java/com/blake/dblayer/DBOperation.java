@@ -1,5 +1,6 @@
 package com.blake.dblayer;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -11,12 +12,15 @@ public class DBOperation {
 	private static DBOperation db = null;
 	
 	protected String driver = "com.mysql.jdbc.Driver";
-	protected String url = "jdbc:mysql://127.0.0.1:3306/book";
+	protected String urlhead = "jdbc:mysql://";
+	protected String ip = "127.0.0.1";
+	protected int port = 3306;
+	protected String dbname = "book";
 	protected String user = "root";
 	protected String password = "123456" ;
 	
 	protected Connection conn = null;
-
+	
 	public static DBOperation getInst(){
 		if(db == null){
 			synchronized(DBOperation.class){
@@ -27,13 +31,28 @@ public class DBOperation {
 		return db;
 	}
 	
-	public synchronized void init(){
+	public void init(){
 		// 加载驱动程序
 		try {
 			Class.forName(driver);
+			String url = urlhead+ip+":"+port+"/"+dbname;
 			conn = DriverManager.getConnection(url, user, password);
 			if(!conn.isClosed())
 				System.out.println("成功连接服务器");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public synchronized void changeConnection(){
+		try {
+			Class.forName(driver);
+			String url = urlhead+ip+":"+port+"/"+dbname;
+			conn = DriverManager.getConnection(url, user, password);
+			if(!conn.isClosed())
+				System.out.println("服务器转换成功");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -47,14 +66,10 @@ public class DBOperation {
 		}
 		StringBuffer result = new StringBuffer();
 		try {
-			// statement用来执行SQL语句
 			System.out.print(conn);
 			Statement statement = conn.createStatement();
-			// 要执行的SQL语句
 			ResultSet rs = statement.executeQuery(command);  
-			
 			statement.close();
-			
 			while(rs.next()) { 
 				for(int i=1; i<4; i++){
 					result.append(rs.getString(i)+",");
@@ -75,13 +90,9 @@ public class DBOperation {
 		
 		boolean done = false;
 		try {
-			// statement用来执行SQL语句
 			Statement statement = conn.createStatement();
-			// 要执行的SQL语句
 			done = statement.execute(command);  
-			
 			statement.close();
-			
 		}catch (Exception e){
 			e.printStackTrace();
 			done = false ; 
@@ -95,11 +106,8 @@ public class DBOperation {
 		
 		int done = -1;
 		try {
-			// statement用来执行SQL语句
 			Statement statement = conn.createStatement();
-			// 要执行的SQL语句
 			done = statement.executeUpdate(command);  
-			
 			statement.close();
 		}catch (Exception e){
 			e.printStackTrace();
@@ -117,14 +125,6 @@ public class DBOperation {
 
 	public void setDriver(String driver) {
 		this.driver = driver;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
 	}
 
 	public String getUser() {
@@ -151,4 +151,29 @@ public class DBOperation {
 	public void setConn(Connection conn) {
 		this.conn = conn;
 	}
+	
+	public String getDbname() {
+		return dbname;
+	}
+
+	public void setDbname(String dbname) {
+		this.dbname = dbname;
+	}
+	
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
 }

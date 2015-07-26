@@ -3,7 +3,6 @@ package com.blake.service;
 public  class Transaction {
 	
 	private static Transaction tran;
-	private Resolve res = null;
 	private Parser par = null;
 	
 	public static Transaction getInst(){
@@ -17,23 +16,13 @@ public  class Transaction {
 	}
 	
 	public void init(){
-		if(res == null && par == null){
-			res = new Resolve();
+		if( par == null){
 			par = new Parser();
 		}
 	}
 	
 	public void DeInit(){
-		res = null;
 		par = null;
-	}
-	
-	public synchronized Resolve getRes() {
-		return res;
-	}
-
-	public synchronized void setRes(Resolve res) {
-		this.res = res;
 	}
 
 	public Parser getPar() {

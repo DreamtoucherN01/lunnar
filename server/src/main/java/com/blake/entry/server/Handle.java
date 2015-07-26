@@ -1,6 +1,7 @@
 package com.blake.entry.server;
 
 import java.io.IOException;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -20,6 +21,11 @@ public class Handle implements Runnable{
     private boolean check = false;
 
 	public Handle(Selector selector, SocketChannel socketchannel) {
+		try {
+			socketchannel.socket().setSoTimeout(10000);
+		} catch (SocketException e1) {
+			e1.printStackTrace();
+		}
 		this.socketChannel = socketchannel;  
         try {  
             socketChannel.configureBlocking(false);  
@@ -40,7 +46,7 @@ public class Handle implements Runnable{
                 status = WRITE_STATUS;  
             } else if (status == WRITE_STATUS) {  
                 write();  
-                selectionKey.cancel();  
+                selectionKey.cancel();
             }  
         } catch (IOException e) {  
             e.printStackTrace();  
@@ -63,11 +69,10 @@ public class Handle implements Runnable{
 		}
         ByteBuffer buffer = ByteBuffer.wrap(content.getBytes());  
         socketChannel.write(buffer);  
-        socketChannel.close();
     }  
 	
 	private void process(String str) {
-		String temp = Transaction.getInst().getPar().parser(Transaction.getInst().getRes().resolve(str));
+		String temp = Transaction.getInst().getPar().parser(str);
 		String[] data = temp.split("\n");
 		for(int i= 0 ; i< data.length;i++){
 			if(data[i].startsWith("select")){

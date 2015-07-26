@@ -35,8 +35,6 @@ import com.blake.util.FileUtils;
  */
 public class Entry {
 	
-	private static Configuration list = null ;// = new Properties();
-	
 	static Accepter accepter =null;//= new Accepter();
 
 	public static void main(String[] args) {
@@ -61,11 +59,7 @@ public class Entry {
 	}
 
 	private static void init() {
-		try {
-			list = DataProvider.getInst().getCoreConfigurationDataFromResource();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		DataProvider.getInst().init();
 		Transaction.getInst().init();
 		DBOperation.getInst().init();
 	}
