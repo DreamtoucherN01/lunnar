@@ -1,0 +1,8 @@
+masternodeip=127.0.0.1
+masternodedbname=book
+backnodeip=127.0.0.1
+backnodename=book
+slavenodeoneip=127.0.0.1
+slavenodeonename=book;
+slavenodetwoip=127.0.0.1
+slavenodetwoname=book

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<host>
+    <!-- 主节点 -->
+	<MasterNodes>  
+	    <node id="12">  
+	        <ip>thinking in java</ip>  
+	        <dbname>dbname1</dbname>  
+	    </node>  
+	</MasterNodes>
+	
+	<!-- 备用节点 -->
+	<BackNodes>
+		<node>
+			<ip>kddk</ip>
+			<dbname>dbname1</dbname>
+		</node>
+	</BackNodes>
+	
+	<!-- 子节点 -->
+	<SlaveNodes>  
+	    <node id="12">  
+	        <ip>thinking in java</ip>  
+	        <dbname>85.5</dbname>  
+	    </node>  
+	    <node id="15">  
+	        <ip>Spring in Action</ip>  
+	        <dbname>39.0</dbname>  
+	    </node>  
+	</SlaveNodes>
+</host>
